@@ -1,0 +1,87 @@
+@model NewsApp.Models.Article
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Article</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ArticleId" />
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content" class="control-label"></label>
+                <input asp-for="Content" class="form-control" />
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+            <label asp-for="ImageName" class="control-label"></label>
+            <input asp-for="ImageName" class="form-control" />
+            <span asp-validation-for="ImageName" class="text-danger"></span>
+            </div> *@
+            <div class="form-group my-3">
+                @* Display additional message if an image has already been set, else display image field label *@
+                @if (!string.IsNullOrEmpty(Model.ImageName))
+                {
+                    <label asp-for="ImageFile" class="control-label mb-2"><i>This book has already got an image.<br />Upload
+                            a new image to replace current image or leave
+                            blanc to keep current image</i></label>
+                }
+                else
+                {
+                    <label asp-for="ImageFile" class="control-label mb-2"></label>
+                }
+                @* Label and input fields for book image *@
+                <label asp-for="ImageFile" class="control-label mb-2 visually-hidden"></label>
+                <input asp-for="ImageFile" type="file" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="AttributionName" class="control-label"></label>
+                <input asp-for="AttributionName" class="form-control" />
+                <span asp-validation-for="AttributionName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AttributionUrl" class="control-label"></label>
+                <input asp-for="AttributionUrl" class="form-control" />
+                <span asp-validation-for="AttributionUrl" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+            <label asp-for="CreatedBy" class="control-label"></label>
+            <input asp-for="CreatedBy" class="form-control" />
+            <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
