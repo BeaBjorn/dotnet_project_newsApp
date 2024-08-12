@@ -1,78 +1,66 @@
 @model IEnumerable<NewsApp.Models.Article>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All articles";
 }
 
-<h1>Index</h1>
+<h1 class="my-5">@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="my-5">
+    <a class="btn purple-button" asp-action="Create">Create new article</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            @* <th>
-            @Html.DisplayNameFor(model => model.Content)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.ImageName)
-            </th>
-            @* <th>
-            @Html.DisplayNameFor(model => model.AttributionName)
-            </th>
-            <th>
-            @Html.DisplayNameFor(model => model.AttributionUrl)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            @* <th>
-            @Html.DisplayNameFor(model => model.Category)
-            </th> *@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                @* <td>
-            @Html.DisplayFor(modelItem => item.Content)
-            </td> *@
-                <td>
-                    @Html.DisplayFor(modelItem => item.ImageName)
-                </td>
-                @* <td>
-            @Html.DisplayFor(modelItem => item.AttributionName)
-            </td>
-            <td>
-            @Html.DisplayFor(modelItem => item.AttributionUrl)
-            </td> *@
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedBy)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedDate)
-                </td>
-                @* <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
-            </td> *@
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ArticleId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ArticleId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ArticleId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="col-10">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-3">
+            @Html.DisplayNameFor(model => model.Title)
+        </div>
+        <div class="col-3">
+            Category
+        </div>
+        <div class="col-2">
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </div>
+        <div class="col-2">
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </div>
+    </div>
+</div>
+
+
+<div class="border-top border-2 border-dark mt-2">
+    @foreach (var item in Model)
+    {
+        <div class="row d-flex align-items-center py-2 border-bottom border-1">
+            <div class="d-flex align-items-center position-relative col-10">
+                <div class="col-2">
+                    @* Displaying the book image if it has been set, otherwise a placeholder image is displayed *@
+                    @if (string.IsNullOrEmpty(item.ImageName))
+                    {
+                        <img style="width:50px; height:50px;" src="images/placeholder.png" alt="Fallback Image" />
+                    }
+                    else
+                    {
+                        <a href="images/@item.ImageName">
+                            <img style="width:50px; height:50px;" src="images/@Html.DisplayFor(modelItem => item.ImageName)"
+                                alt="Book Image" />
+                        </a>
+                    }
+                </div>
+                <div class="col-3">
+                    <a class="stretched-link text-black text-decoration-none" asp-action="Details"
+                        asp-route-id="@item.ArticleId">@Html.DisplayFor(modelItem => item.Title)
+                    </a>
+                </div>
+                <div class="col-3">@Html.DisplayFor(modelItem => item.Category.Name)</div>
+                <div class="col-2">@Html.DisplayFor(modelItem => item.CreatedBy)</div>
+                <div class="col-2">@item.CreatedDate.ToString("yyyy-MM-dd")</div>
+            </div>
+            <div class="col-2 text-end">
+                @* Links to edit and delete views *@
+                <a class="btn purple-button me-2" asp-action="Edit" asp-route-id="@item.ArticleId">Edit</a>
+                <a class="btn delete-button" asp-action="Delete" asp-route-id="@item.ArticleId">Delete</a>
+            </div>
+        </div>
+    }
+</div>

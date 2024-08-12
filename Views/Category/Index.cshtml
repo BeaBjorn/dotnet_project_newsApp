@@ -1,14 +1,24 @@
 @model IEnumerable<NewsApp.Models.Category>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categories";
 }
 
-<h1>Index</h1>
+<h1 class="my-5">@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn purple-button" asp-action="Create">Create new category</a>
 </p>
+
+@* @foreach (var item in Model)
+{
+<a class="btn delete-button" asp-action="Details" asp-route-id="@item.CategoryId">@Html.DisplayFor(modelItem =>
+item.Name)</a>
+} *@
+
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -19,17 +29,21 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td class="text-end">
+                    <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a>
+                    |
+                    <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+                    <a class="btn purple-button ms-5" asp-action="Details" asp-route-id="@item.CategoryId">
+                        View relating articles
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

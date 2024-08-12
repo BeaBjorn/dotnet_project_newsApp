@@ -1,87 +1,86 @@
 @model NewsApp.Models.Article
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit article";
 }
 
-<h1>Edit</h1>
-
-<h4>Article</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ArticleId" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            @* <div class="form-group">
-            <label asp-for="ImageName" class="control-label"></label>
-            <input asp-for="ImageName" class="form-control" />
-            <span asp-validation-for="ImageName" class="text-danger"></span>
-            </div> *@
-            <div class="form-group my-3">
-                @* Display additional message if an image has already been set, else display image field label *@
-                @if (!string.IsNullOrEmpty(Model.ImageName))
-                {
-                    <label asp-for="ImageFile" class="control-label mb-2"><i>This book has already got an image.<br />Upload
-                            a new image to replace current image or leave
-                            blanc to keep current image</i></label>
-                }
-                else
-                {
-                    <label asp-for="ImageFile" class="control-label mb-2"></label>
-                }
-                @* Label and input fields for book image *@
-                <label asp-for="ImageFile" class="control-label mb-2 visually-hidden"></label>
-                <input asp-for="ImageFile" type="file" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="AttributionName" class="control-label"></label>
-                <input asp-for="AttributionName" class="form-control" />
-                <span asp-validation-for="AttributionName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AttributionUrl" class="control-label"></label>
-                <input asp-for="AttributionUrl" class="form-control" />
-                <span asp-validation-for="AttributionUrl" class="text-danger"></span>
-            </div>
-            @* <div class="form-group">
-            <label asp-for="CreatedBy" class="control-label"></label>
-            <input asp-for="CreatedBy" class="form-control" />
-            <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="narrow-container">
+    <h1 class="my-5">@ViewData["Title"]</h1>
+    <div class="col">
+        <a class="btn purple-button" asp-action="Index">Back to all articles</a>
     </div>
+    <hr />
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ArticleId" />
+        <div class="form-group my-3">
+            <label asp-for="Title" class="control-label my-2"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group my-3">
+            @* Display additional message if an image has already been set, else display image field label *@
+            @if (!string.IsNullOrEmpty(Model.ImageName))
+            {
+
+                <i class="d-block">Curent image:</i>
+                <img src="~/images/@Model.ImageName" alt="Current Image" />
+                <label asp-for="ImageFile" class="control-label my-2"><i>This book has already got an image.<br />Upload
+                        a new image to replace current image or leave
+                        blank to keep current image</i></label>
+            }
+            else
+            {
+                <label asp-for="ImageFile" class="control-label mb-2"></label>
+            }
+            @* Label and input fields for book image *@
+            <label asp-for="ImageFile" class="control-label mb-2 visually-hidden"></label>
+            <input asp-for="ImageFile" type="file" class="form-control" />
+        </div>
+        <div class="form-group my-3">
+            <label asp-for="AttributionName" class="control-label my-2"></label>
+            <input asp-for="AttributionName" class="form-control" />
+            <span asp-validation-for="AttributionName" class="text-danger"></span>
+        </div>
+        <div class="form-group my-3">
+            <label asp-for="AttributionUrl" class="control-label my-2"></label>
+            <input asp-for="AttributionUrl" class="form-control" />
+            <span asp-validation-for="AttributionUrl" class="text-danger"></span>
+        </div>
+        <div class="form-group my-3">
+            <label asp-for="CategoryId" class="control-label my-2">Category</label>
+            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+        </div>
+        <div class="form-group my-3">
+            <label asp-for="Content" class="control-label my-2"></label>
+            <textarea asp-for="Content" class="form-control" id="Content"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save changes" class="btn purple-button my-4" />
+        </div>
+    </form>
+</div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{
+        <script>
+            tinymce.init({
+                selector: '#Content',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+                toolbar: 'blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            @* tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+        { value: 'First.Name', title: 'First Name' },
+        { value: 'Email', title: 'Email' },
+        ], *@
+                ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+                                                                                                                                                                                        });
+        </script>
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

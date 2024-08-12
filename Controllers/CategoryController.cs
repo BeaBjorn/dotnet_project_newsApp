@@ -47,12 +47,16 @@ namespace NewsApp.Controllers
             }
 
             var category = await _context.categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            .Include(a => a.Articles)
+            .FirstOrDefaultAsync(m => m.CategoryId == id);
+
+            var allCategories = _context.categories.ToList();
+
             if (category == null)
             {
                 return NotFound();
             }
-
+            ViewBag.AllCategories = allCategories;
             return View(category);
         }
 

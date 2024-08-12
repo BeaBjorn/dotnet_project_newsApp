@@ -8,15 +8,17 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NewsApp.styles.css" asp-append-version="true" />
+    <script src="https://cdn.tiny.cloud/1/76pih9k7wtt7lhgmekpmn2psp1yt2m5842h88mv9bc8qw05v/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script>
 </head>
 
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm mb-3">
-            <div class="container-fluid">
+            <div class="container">
                 @* Logo linking to the index book view rendered with the BookController *@
-                <a class="logo" asp-controller="Home" asp-action="Index">
-                    <img width=" 200" class="logo" src="~/images/bee-logotype.svg" alt="efc logo">
+                <a class="logo me-5" asp-controller="Home" asp-action="Index">
+                    <img width=" 200" class="logo" src="~/images/bee-logotype.svg" alt="logo">
                 </a>
                 @* <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NewsApp</a> *@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"

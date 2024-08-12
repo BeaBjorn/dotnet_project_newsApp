@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NewsApp.Data;
 using NewsApp.Models;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using System.IO;
 
 namespace NewsApp.Controllers
 {
@@ -17,7 +20,6 @@ namespace NewsApp.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly string wwwRootPath;
-
 
         public ArticleController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
@@ -29,7 +31,6 @@ namespace NewsApp.Controllers
         // GET: Article
         public async Task<IActionResult> Index()
         {
-            //Check is _Context is null
             if (_context.Articles == null)
             {
                 return NotFound();
@@ -87,22 +88,29 @@ namespace NewsApp.Controllers
                     string extension = Path.GetExtension(article.ImageFile.FileName);
 
                     //Ensures there are no spaces and adds timestamp to file name
-                    article.ImageName = fileName = fileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssfff") + extension;
+                    article.ImageName = fileName = fileName.Replace(" ", string.Empty) + DateTime.Now.ToString("yymmssfff") + extension;
 
                     //Setting the path to where the image is to be stored
                     string path = Path.Combine(wwwRootPath + "/images", fileName);
 
-                    //Store image in filesystem 
-                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    // Store image in filesystem
+                    using (var image = Image.Load(article.ImageFile.OpenReadStream()))
                     {
-                        await article.ImageFile.CopyToAsync(fileStream);
+                        // Resize the image to 1000px width, maintaining aspect ratio
+                        image.Mutate(x => x.Resize(1000, 0));
+
+                        // Crop the image to 1000x600px from the center
+                        image.Mutate(x => x.Crop(new Rectangle((image.Width - 1000) / 2, (image.Height - 600) / 2, 1000, 600)));
+
+                        // Save the processed image
+                        await image.SaveAsync(path);
                     }
                 }
-                _context.Add(article);
 
+                article.CreatedDate = DateTime.Now;
                 //add logged in user as author to article
                 article.CreatedBy = User.Identity?.Name ?? "Unknown";
-
+                _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -149,6 +157,46 @@ namespace NewsApp.Controllers
             {
                 try
                 {
+                    if (article.ImageFile != null)
+                    {
+                        // Generate a unique file name
+                        string fileName = Path.GetFileNameWithoutExtension(article.ImageFile.FileName);
+                        string extension = Path.GetExtension(article.ImageFile.FileName);
+                        string newFileName = fileName.Replace(" ", string.Empty) + DateTime.Now.ToString("yymmssfff") + extension;
+                        string path = Path.Combine(wwwRootPath + "/images", newFileName);
+
+                        // Store image in filesystem
+                        using (var image = Image.Load(article.ImageFile.OpenReadStream()))
+                        {
+                            // Resize the image to 1000px width, maintaining aspect ratio
+                            image.Mutate(x => x.Resize(1000, 0));
+
+                            // Crop the image to 1000x600px from the center
+                            image.Mutate(x => x.Crop(new Rectangle((image.Width - 1000) / 2, (image.Height - 600) / 2, 1000, 600)));
+
+                            // Save the processed image
+                            await image.SaveAsync(path);
+                        }
+
+                        // Delete the old image if it exists
+                        if (!string.IsNullOrEmpty(article.ImageName))
+                        {
+                            string oldImagePath = Path.Combine(wwwRootPath + "/images", article.ImageName);
+                            if (System.IO.File.Exists(oldImagePath))
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
+                        }
+
+                        // Update the image name in the database
+                        article.ImageName = newFileName;
+                    }
+                    else
+                    {
+                        // If no new image is uploaded, keep the current image name
+                        _context.Entry(article).Property(x => x.ImageName).IsModified = false;
+                    }
+
                     _context.Update(article);
                     await _context.SaveChangesAsync();
                 }

@@ -20,7 +20,9 @@ namespace NewsApp.Models
         public string? AttributionName { get; set; }
         [Url]
         public string? AttributionUrl { get; set; }
+        [Display(Name = "Author")]
         public string? CreatedBy { get; set; }
+        [Display(Name = "Published")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         //Creating a has one relationship to the Author model
