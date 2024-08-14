@@ -14,29 +14,33 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark mb-3">
             <div class="container">
                 @* Logo linking to the index book view rendered with the BookController *@
                 <a class="logo me-5" asp-controller="Home" asp-action="Index">
-                    <img width=" 200" class="logo" src="~/images/bee-logotype.svg" alt="logo">
+                    <img width=" 200" class="logo" src="~/images/bee-logotype.svg" alt="bee news logo">
                 </a>
-                @* <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NewsApp</a> *@
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Article" asp-action="Index">News</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Article" asp-action="Index">News</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                            </li>
+                        }
                     </ul>
+                    <hr>
                     <partial name="_LoginPartial" />
                 </div>
             </div>

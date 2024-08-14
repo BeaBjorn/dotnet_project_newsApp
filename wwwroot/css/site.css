@@ -30,16 +30,15 @@ a:hover{
 
 .navbar{
   background-color: black;
+  text-align: center;
 }
 
-
 .nav-link{
-  color: white;
+  color: white !important;
 }
 
 .nav-link:hover{
   color: #ffffff;
-  /* text-decoration: underline; */
   border-bottom: solid 3px #A93BFF;
   padding-bottom: 0.3rem;
 }
