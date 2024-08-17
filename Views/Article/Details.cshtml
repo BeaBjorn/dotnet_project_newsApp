@@ -16,25 +16,39 @@
     </div>
 
     <hr>
-    <div class="row d-flex align-items-center">
-        <h2 class="col">@Html.DisplayFor(model => model.Title)</h2>
-        <p class="col text-end">Published: @Model.CreatedDate.ToString("yyyy-MM-dd")</p>
-    </div>
+    <h2 class="col">@Html.DisplayFor(model => model.Title)</h2>
 
     <a asp-action="Details" asp-controller="Category" asp-route-id="@Model.CategoryId" class="btn delete-button my-3">
         @Html.DisplayFor(model => model.Category.Name)
     </a>
-    <p>Created by: @Html.DisplayFor(model => model.CreatedBy)</p>
+
+    <div class="row d-flex align-items-center">
+        <p class="col">Created by: @Html.DisplayFor(model => model.CreatedBy)</p>
+        <p class="col text-end">Published: @Model.CreatedDate.ToString("yyyy-MM-dd")</p>
+    </div>
 
     @* Displaying the book image if it has been set, otherwise a placeholder image is displayed *@
     @if (!string.IsNullOrEmpty(Model.ImageName))
     {
-        <div>
-            <img src="~/images/@Model.ImageName" alt="Current Image" />
-            <a class="d-block" href="@Model.AttributionUrl">
-                <i>@Html.DisplayFor(model => model.AttributionName)</i>
-            </a>
-        </div>
+        <img src="~/images/@Model.ImageName" alt="Current Image" />
+        <p>Photo by:
+            @if (@Model.AttributionName != null)
+            {
+                @if (@Model.AttributionUrl != null)
+                {
+                    <a class="d-block" href="@Model.AttributionUrl">
+                        @Html.DisplayFor(model => model.AttributionName)
+                    </a>
+                }
+                else
+                {
+
+                    @Html.DisplayFor(model => model.AttributionName)
+                }
+
+            }
+
+        </p>
     }
 
     <div class="my-5">@Html.Raw(Model.Content)</div>

@@ -6,15 +6,17 @@
 }
 
 <div class="my-5">
-    <a class="btn purple-button" asp-action="Index">All categories</a>
-    @foreach (var item in allCategories)
+    <a class="btn purple-button mb-2 mb-lg-0" asp-action="Index">All categories</a>
+    @if (allCategories != null)
     {
-        <a class="btn delete-button" asp-action="Details" asp-route-id="@item.CategoryId">
-            @item.Name
-        </a>
+        @foreach (var item in allCategories)
+        {
+            <a class="btn delete-button mb-2 mb-lg-0" asp-action="Details" asp-route-id="@item.CategoryId">
+                @item.Name
+            </a>
+        }
     }
 </div>
-
 
 <h1 class="my-5">@Html.DisplayFor(model => model.Name)</h1>
 
@@ -24,17 +26,17 @@
     <div class="row">
     @foreach (var article in Model.Articles)
         {
-            <div class="col-4 my-3">
+            <div class="col-12 col-md-6 col-lg-4 my-3">
                 <div class="card h-100 position-relative">
                     @* Displaying article image *@
                     @if (string.IsNullOrEmpty(article.ImageName))
                     {
-                        <img src="~/images/placeholder.png" alt="Fallback Image" class="card-img-top img-fluid" />
+                        <img src="~/images/placeholder.png" alt="" class="card-img-top img-fluid" />
                     }
                     else
                     {
                         @* <a href="~/images/@article.ImageName"> *@
-                        <img src="~/images/@article.ImageName" alt="@article.Title Image" class="card-img-top img-fluid" />
+                        <img src="~/images/@article.ImageName" alt="@article.Title" class="card-img-top img-fluid" />
                         @* </a> *@
                     }
                     <div class="card-body">

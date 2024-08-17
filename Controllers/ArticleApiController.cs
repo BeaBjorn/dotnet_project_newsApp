@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsApp.Data;
+using NewsApp.Models;
 
 namespace MyApp.Namespace
 {
@@ -17,14 +18,32 @@ namespace MyApp.Namespace
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetArticles()
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticles(int? categoryId = null)
         {
-            if (_context.Articles == null)
+            IQueryable<Article> query = _context.Articles;
+
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                query = query.Where(a => a.CategoryId == categoryId.Value);
+            }
+
+            return Ok(await query.ToListAsync());
+        }
+
+        // GET: api/Track/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetArticle(int id)
+        {
+            var article = await _context.Articles.FindAsync(id);
+
+            if (article == null)
             {
                 return NotFound();
             }
 
-            return Ok(await _context.Articles.ToListAsync());
+            return Ok(article);
         }
     }
+
+
 }

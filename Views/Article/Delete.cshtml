@@ -29,6 +29,7 @@
     <a asp-action="Details" asp-controller="Category" asp-route-id="@Model.CategoryId" class="btn delete-button my-3">
         @Html.DisplayFor(model => model.Category.Name)
     </a>
+
     <p>Created by: @Html.DisplayFor(model => model.CreatedBy)</p>
 
     @* Displaying the book image if it has been set, otherwise a placeholder image is displayed *@
