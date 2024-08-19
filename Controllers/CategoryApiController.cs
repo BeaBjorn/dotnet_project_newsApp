@@ -5,6 +5,7 @@ using NewsApp.Data;
 
 namespace MyApp.Namespace
 {
+    //Sets the Route for the API endpoint to be api/category
     [Route("api/category")]
     [ApiController]
     public class CategoryApiController : ControllerBase
@@ -31,6 +32,11 @@ namespace MyApp.Namespace
         [HttpGet("{id}")]
         public async Task<ActionResult> GetCategory(int id)
         {
+            //Check is _Context is null
+            if (_context.categories == null)
+            {
+                return NotFound();
+            }
             var category = await _context.categories.FindAsync(id);
 
             if (category == null)

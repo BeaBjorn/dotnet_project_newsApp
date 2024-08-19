@@ -25,7 +25,7 @@
 
                 <i class="d-block">Curent image:</i>
                 <img src="~/images/@Model.ImageName" alt="Current Image" />
-                <label asp-for="ImageFile" class="control-label my-2"><i>This book has already got an image.<br />Upload
+                <label asp-for="ImageFile" class="control-label my-2"><i>This article has already got an image.<br />Upload
                         a new image to replace current image or leave
                         blank to keep current image</i></label>
             }
@@ -64,17 +64,18 @@
 </div>
 
 </div>
-
+@* Including script for TinyMCE *@
 @section Scripts {
+    <script>
+        tinymce.init({
+            selector: '#Content',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+            toolbar: 'blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        });
+    </script>
+
     @{
-        <script>
-            tinymce.init({
-                selector: '#Content',
-                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-                toolbar: 'blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-            });
-        </script>
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

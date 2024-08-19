@@ -31,37 +31,37 @@
 <div class="border-top border-2 border-dark mt-2">
     @foreach (var item in Model)
     {
-            <div class="row d-flex align-items-center py-2 border-bottom border-1">
-                <div class="d-flex align-items-center position-relative col-10">
-                    <div class="col-2">
+        <div class="row d-flex align-items-center py-2 border-bottom border-1">
+            <div class="d-flex align-items-center position-relative col-10">
+                <div class="col-2">
                     @* Displaying the book image if it has been set, otherwise a placeholder image is displayed *@
                     @if (string.IsNullOrEmpty(item.ImageName))
                     {
-                                <img style="width:50px; height:50px;" src="images/placeholder.png" alt="Fallback Image" />
+                        <img style="width:50px; height:50px;" src="images/placeholder.png" alt="" />
                     }
                     else
                     {
-                                <a href="images/@item.ImageName">
-                                    <img style="width:50px; height:50px;" src="images/@Html.DisplayFor(modelItem => item.ImageName)"
-                                        alt="Book Image" />
-                                </a>
+                        @* <a href="images/@item.ImageName"> *@
+                        <img style="width:50px; height:50px;" src="images/@Html.DisplayFor(modelItem => item.ImageName)"
+                            alt="" />
+                        @* </a> *@
                     }
-                    </div>
-                    <div class="col-3">
-                        <a class="stretched-link text-black text-decoration-none" asp-action="Details"
-                            asp-route-id="@item.ArticleId">@Html.DisplayFor(modelItem => item.Title)
-                        </a>
-                    </div>
-                    <div class="col-4 col-sm-3 d-none d-sm-block">@Html.DisplayFor(modelItem => item.Category.Name)</div>
-                    <div class="col-2 d-none d-xxl-block">@Html.DisplayFor(modelItem => item.CreatedBy)</div>
-                    <div class="col-4 col-sm-2 d-none d-sm-block">@item.CreatedDate.ToString("yyyy-MM-dd")</div>
                 </div>
-                <div class="col-2 text-end">
-                @* Links to edit and delete views *@
-                    <a class="btn purple-button me-0 me-xxl-2 mb-2 mb-xl-0" asp-action="Edit"
-                        asp-route-id="@item.ArticleId">Edit</a>
-                    <a class="btn delete-button" asp-action="Delete" asp-route-id="@item.ArticleId">Delete</a>
+                <div class="col-3">
+                    <a class="stretched-link text-black text-decoration-none" asp-action="Details"
+                        asp-route-id="@item.ArticleId">@Html.DisplayFor(modelItem => item.Title)
+                    </a>
                 </div>
+                <div class="col-4 col-sm-3 d-none d-sm-block">@Html.DisplayFor(modelItem => item.Category.Name)</div>
+                <div class="col-2 d-none d-xxl-block">@Html.DisplayFor(modelItem => item.CreatedBy)</div>
+                <div class="col-4 col-sm-2 d-none d-sm-block">@item.CreatedDate.ToString("yyyy-MM-dd")</div>
             </div>
+            <div class="col-2 text-end">
+                @* Links to edit and delete views *@
+                <a class="btn purple-button me-0 me-xxl-2 mb-2 mb-xl-0" asp-action="Edit"
+                    asp-route-id="@item.ArticleId">Edit</a>
+                <a class="btn delete-button" asp-action="Delete" asp-route-id="@item.ArticleId">Delete</a>
+            </div>
+        </div>
     }
 </div>

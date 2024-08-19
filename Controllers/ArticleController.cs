@@ -12,6 +12,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
 
+//Namespace
 namespace NewsApp.Controllers
 {
     [Authorize]
@@ -28,13 +29,15 @@ namespace NewsApp.Controllers
             wwwRootPath = hostEnvironment.WebRootPath;
         }
 
-        // GET: Article
+        // GET: Articles
         public async Task<IActionResult> Index()
         {
+            //Check if _Context is not null
             if (_context.Articles == null)
             {
                 return NotFound();
             }
+            //Includes category and returns list of all articles
             var applicationDbContext = _context.Articles.Include(a => a.Category);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -42,6 +45,7 @@ namespace NewsApp.Controllers
         // GET: Article/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //Check if thereäs an article with the given id
             if (id == null)
             {
                 return NotFound();
@@ -53,6 +57,7 @@ namespace NewsApp.Controllers
                 return NotFound();
             }
 
+            //Includes category and returns the first article found with the given id
             var article = await _context.Articles
                 .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.ArticleId == id);
@@ -93,7 +98,7 @@ namespace NewsApp.Controllers
                     //Setting the path to where the image is to be stored
                     string path = Path.Combine(wwwRootPath + "/images", fileName);
 
-                    // Store image in filesystem
+                    // Resize and crop image and store in filesystem
                     using (var image = Image.Load(article.ImageFile.OpenReadStream()))
                     {
                         // Resize the image to 1000px width, maintaining aspect ratio
@@ -107,6 +112,7 @@ namespace NewsApp.Controllers
                     }
                 }
 
+                //Set time for when article was created
                 article.CreatedDate = DateTime.Now;
                 //add logged in user as author to article
                 article.CreatedBy = User.Identity?.Name ?? "Unknown";
@@ -121,6 +127,7 @@ namespace NewsApp.Controllers
         // GET: Article/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //Check that article with given Id exists
             if (id == null)
             {
                 return NotFound();
@@ -153,7 +160,7 @@ namespace NewsApp.Controllers
                 return NotFound();
             }
 
-            //Check is _Context is null
+            //Check if _Context is null
             if (_context.Articles == null)
             {
                 return NotFound();
@@ -170,7 +177,7 @@ namespace NewsApp.Controllers
                         return NotFound();
                     }
 
-                    // Update the properties
+                    // Update article properties properties
                     existingArticle.Title = article.Title;
                     existingArticle.Content = article.Content;
                     existingArticle.AttributionName = article.AttributionName;
@@ -178,7 +185,7 @@ namespace NewsApp.Controllers
                     existingArticle.CreatedDate = article.CreatedDate;
                     existingArticle.CategoryId = article.CategoryId;
 
-                    // Handle image file
+                    // Handle the image file
                     if (article.ImageFile != null)
                     {
                         // Generate a unique file name for the new image
@@ -214,7 +221,7 @@ namespace NewsApp.Controllers
                         _context.Entry(existingArticle).Property(x => x.ImageName).IsModified = false;
                     }
 
-                    // Update the article
+                    // Updates the article
                     _context.Update(existingArticle);
                     await _context.SaveChangesAsync();
                 }
@@ -234,9 +241,6 @@ namespace NewsApp.Controllers
             ViewData["CategoryId"] = new SelectList(_context.categories, "CategoryId", "Name", article.CategoryId);
             return View(article);
         }
-
-
-
 
 
         // GET: Article/Delete/5
@@ -274,12 +278,15 @@ namespace NewsApp.Controllers
             {
                 return NotFound();
             }
+
+            //Gets first article with matching id
             var article = await _context.Articles.FindAsync(id);
             if (article != null)
             {
+                //Removes article form database
                 _context.Articles.Remove(article);
             }
-
+            //Returns index view
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

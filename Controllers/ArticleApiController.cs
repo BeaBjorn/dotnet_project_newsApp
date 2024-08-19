@@ -6,6 +6,7 @@ using NewsApp.Models;
 
 namespace MyApp.Namespace
 {
+    //Sets the Route for the API endpoint to be api/article
     [Route("api/article")]
     [ApiController]
     public class ArticleApiController : ControllerBase
@@ -16,10 +17,15 @@ namespace MyApp.Namespace
         {
             _context = context;
         }
-
+        //HttpGet to get all articles and belonging category from database
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Article>>> GetArticles(int? categoryId = null)
         {
+            //Check is _Context is null
+            if (_context.Articles == null)
+            {
+                return NotFound();
+            }
             IQueryable<Article> query = _context.Articles;
 
             if (categoryId.HasValue && categoryId.Value > 0)
@@ -30,10 +36,16 @@ namespace MyApp.Namespace
             return Ok(await query.ToListAsync());
         }
 
-        // GET: api/Track/5
+        // GET: api/article/5
+        //HttpGet to get specific article based on id from database
         [HttpGet("{id}")]
         public async Task<ActionResult> GetArticle(int id)
         {
+            //Check is _Context is null
+            if (_context.Articles == null)
+            {
+                return NotFound();
+            }
             var article = await _context.Articles.FindAsync(id);
 
             if (article == null)
@@ -44,6 +56,4 @@ namespace MyApp.Namespace
             return Ok(article);
         }
     }
-
-
 }
